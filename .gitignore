@@ -1,2 +1,6 @@
+
 *.csv
 *.ipynb
+
+# all . folders
+.*/
