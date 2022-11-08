@@ -10,3 +10,9 @@ Work in progress or planned
 - redmart
 - Giant
 - Sheng siong
+
+## Aims
+Jobstreet Data: 
+- See what affects salary
+- Come up with topic modelling
+- Generate a sample Job Description
