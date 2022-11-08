@@ -1,0 +1,9 @@
+name: scrapper-env
+channels:
+  - defaults
+  - conda-forge
+dependencies:
+  - python=3.9.9
+  - pip=22.0.4
+  - pip:
+    - -r requirements.txt
