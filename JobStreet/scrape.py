@@ -8,6 +8,7 @@ import os
 from pprint import pformat
 import time
 import datetime
+import argparse
 
 # Links
 jobstreet_main_link = 'http://www.jobstreet.com.sg'
@@ -161,7 +162,7 @@ def extract_from_one_job_listing(job_link, position)->dict:
         logger.error(f"Unable to extract job listing info from {job_link} for position {position}")
         return {'Error': {'job_link': job_link, 'Message':"status_code", 'position':position}}
 
-def extract_from_page()->List:
+def extract_from_page(link:str)->List:
     pass
 
 
@@ -215,4 +216,8 @@ def main():
 
 
 if __name__ == "__main__":
+    parser =argparse.ArgumentParser()
+    parser.add_argument('--pages', type=int, default=5)
+    parser.add_argument('--search_term', type=str, default='Data-scientist')
+
     main()
