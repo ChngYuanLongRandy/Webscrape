@@ -205,7 +205,7 @@ def main(args):
             job_listings.append(listing)
 
     curr_dir = os.getcwd()
-    sample_path = curr_dir+'/sample'+ timestamp +'.jsonl'
+    sample_path = curr_dir+'/'+ search_term + timestamp +'.jsonl'
     write_into_jsonl(sample_path, job_listings, overwrite=True)
 
 
