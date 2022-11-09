@@ -6,17 +6,31 @@ from collections import defaultdict
 from typing import List
 import os
 from pprint import pformat
+import time
+import datetime
 
-logging.basicConfig(format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
+# Links
+jobstreet_main_link = 'http://www.jobstreet.com.sg'
+jobstreet_search_link = 'http://www.jobstreet.com.sg/en/job-search/'
+search_terms = ['data-scientist-jobs','data-engineer-jobs', 'data-analyst-jobs', 'machine-learning-jobs']
+
+def return_timestamp():
+    dt_time = datetime.datetime.today()
+    return str(10000000000*dt_time.year + 100000000*dt_time.month + 1000000*dt_time.day + 10000*dt_time.hour + 100*dt_time.minute + dt_time.second)
+
+timestamp = return_timestamp()
+
+logging.basicConfig(
+    filename='logfile'+ timestamp,
+    filemode='a',
+    format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
     datefmt='%Y-%m-%d:%H:%M:%S',
     level=logging.DEBUG)
 
 logger = logging.getLogger(__name__)
 
-jobstreet_main_link = 'http://www.jobstreet.com.sg'
-jobstreet_search_link = 'http://www.jobstreet.com.sg/en/job-search/'
-search_terms = ['data-scientist-jobs','data-engineer-jobs', 'data-analyst-jobs', 'machine-learning-jobs']
-
+consoleHandler = logging.StreamHandler()
+logger.addHandler(consoleHandler)
 
 def log_decorator(log_name):
     def log_this(function):
@@ -74,7 +88,10 @@ def return_job_details(results)->dict:
             continue
         if (content.name == 'li'):
             # print(f"List content: {content.text}")
-            temp_string +=content.string + "."
+            if content.string is None:
+                temp_string = ""
+            else:
+                temp_string += content.string + "."
         if idx == len(results[0].find_all(['li','strong']))-1:
             last_key = list(temp_dict.keys())[-1]
             temp_dict[last_key] = temp_string
@@ -144,9 +161,14 @@ def extract_from_one_job_listing(job_link, position)->dict:
         logger.error(f"Unable to extract job listing info from {job_link} for position {position}")
         return {'Error': {'job_link': job_link, 'Message':"status_code", 'position':position}}
 
+def extract_from_page()->List:
+    pass
+
+
 def main():
 
     job_listings = []
+    page_num = 2
 
     link = jobstreet_search_link + search_terms[0]
     results = requests.get(link)
@@ -160,19 +182,35 @@ def main():
     headers = soup.select('h1 a')
 
 
-    # for idx in range(1, len(headers)):
-    for idx in range(1, 10):
+    for idx in range(1, len(headers)):
+#    for idx in range(1, 10):
         position = headers[idx].string
         job_link=headers[idx].get('href')
         job_listings.append(extract_from_one_job_listing(job_link, position))
 
-    # idx = 5
-    # position = headers[idx].string
-    # job_link=headers[idx].get('href')
-    # job_listings.append(extract_from_one_job_listing(job_link, position))
+
+    time.sleep(5)
+    # Should return something like this format https://www.jobstreet.com.sg/en/job-search/data-scientist-jobs/480/
+    # jobstreet search link + search term + page num
+    link = jobstreet_search_link+ search_terms[0]+"/"+ str(page_num)+"/"
+    results = requests.get(link)
+    if results.status_code == 200:
+        logger.info('Job street link is Good to go!')
+    else:
+        logger.error(f'Unable to proceed with {link}')
+
+    soup = bs4.BeautifulSoup(results.text, 'html.parser')
+    # This headers will contain all of the clickable links at the side bar
+    headers = soup.select('h1 a')
+
+    for idx in range(1, len(headers)):
+#    for idx in range(1, 10):
+        position = headers[idx].string
+        job_link=headers[idx].get('href')
+        job_listings.append(extract_from_one_job_listing(job_link, position))
 
     curr_dir = os.getcwd()
-    sample_path = curr_dir+'/sample.jsonl'
+    sample_path = curr_dir+'/sample'+ timestamp +'.jsonl'
     write_into_jsonl(sample_path, job_listings, overwrite=True)
 
 
