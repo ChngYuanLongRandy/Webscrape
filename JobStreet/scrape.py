@@ -4,6 +4,8 @@ import requests
 import logging
 from collections import defaultdict
 from typing import List
+import os
+from pprint import pformat
 
 logging.basicConfig(format='%(asctime)s,%(msecs)d %(levelname)-8s [%(filename)s:%(lineno)d] %(message)s',
     datefmt='%Y-%m-%d:%H:%M:%S',
@@ -16,6 +18,18 @@ jobstreet_search_link = 'http://www.jobstreet.com.sg/en/job-search/'
 search_terms = ['data-scientist-jobs','data-engineer-jobs', 'data-analyst-jobs', 'machine-learning-jobs']
 
 
+def log_decorator(log_name):
+    def log_this(function):
+        logger = logging.getLogger(log_name)
+        def new_function(*args,**kwargs):
+            logger.info(f"{function.__name__} - {args} - {kwargs}")
+            output = function(*args,**kwargs)
+            logger.info(f"{function.__name__} returned: {pformat(output)}")
+            return output
+        return new_function
+    return log_this
+
+@log_decorator(logger.name)
 def return_com_overview(results)->dict:
     """returns a dictionary filled with company overview information
 
@@ -31,7 +45,7 @@ def return_com_overview(results)->dict:
             com_overview_dict['Company Overview'] = str(section.text)[16:]
     return com_overview_dict
 
-
+@log_decorator(logger.name)
 def return_job_details(results)->dict:
     """Returns the job details in a dictionary with the headers in bold 
     and the list underneath them as values. Does not capture if they are
@@ -67,14 +81,17 @@ def return_job_details(results)->dict:
 
     return temp_dict
 
+@log_decorator(logger.name)
 def return_company_name(results)->str:
     company_name = results[0].string
     return company_name
 
+@log_decorator(logger.name)
 def return_small_section_text(results)->List:
     small_section_text = [data.string for data in results]
     return small_section_text
 
+@log_decorator(logger.name)
 def return_add_info(results)->dict:
     temp_dict = defaultdict(list)
     for item in results:
@@ -83,16 +100,54 @@ def return_add_info(results)->dict:
         temp_dict[key] = value
     return temp_dict
 
-def log_info(position,company_name,small_section,jd, add_info, com_overview):
-    logger.info(position)
-    logger.info(company_name)
-    logger.info(small_section)
-    logger.info(jd)
-    logger.info(add_info)
-    logger.info(com_overview)
+@log_decorator(logger.name)
+def return_all_info(results_job_link):
+    soup = bs4.BeautifulSoup(results_job_link.text,'html.parser')
+    small_section = soup.find_all('div', {"class": "sx2jih0 zcydq86a"})
+    company_name = soup.find_all('span', {"class": "sx2jih0 zcydq84u _18qlyvc0 _18qlyvc1x _18qlyvc2 _1d0g9qk4 _18qlyvcb"})
+    jd = soup.select('[data-automation="jobDescription"]')
+    add_info = soup.find_all('div', {"class": "sx2jih0 zcydq8r _1tqfum90 _1tqfum97"})
+    com_overview = soup.findAll('div', {'class': "sx2jih0 zcydq86q zcydq86v zcydq86w"})
+
+    small_section = return_small_section_text(small_section)
+    company_name = return_company_name(company_name)
+    jd = return_job_details(jd)
+    add_info = return_add_info(add_info)
+    com_overview = return_com_overview(com_overview)
+
+    return small_section, company_name, jd, add_info, com_overview
+
+def write_into_jsonl(path:str, job_listings:List[dict], overwrite:bool=False):
+    if os.path.exists(path) and overwrite == False:
+        logger.info(f'Unable to write output into {path} as path exists and overwrite is False')
+    else:
+        with open(path, 'w') as writer:
+            for job_listing in job_listings:
+                writer.write(json.dumps(job_listing) + '\n')
+
+@log_decorator(logger.name)
+def extract_from_one_job_listing(job_link, position)->dict:
+    job_link = jobstreet_main_link+job_link
+    results_job_link = requests.get(job_link)
+
+    if results_job_link.status_code==200:
+        logger.info('Job street job link is Good to go!')
+
+        try:
+            small_section, company_name, jd, add_info, com_overview = return_all_info(results_job_link)
+            return {"position":position},{"company_name":company_name},{"small_section":small_section},jd, add_info, com_overview, {"url":job_link}
+
+        except Exception as e:
+            logger.error(f"Unable to extract info due to {e}")
+            return {'Error': {'job_link': job_link, 'Message':str(e), 'position':position}}
+    else:
+        logger.error(f"Unable to extract job listing info from {job_link} for position {position}")
+        return {'Error': {'job_link': job_link, 'Message':"status_code", 'position':position}}
 
 def main():
-    idx = 1
+
+    job_listings = []
+
     link = jobstreet_search_link + search_terms[0]
     results = requests.get(link)
     if results.status_code == 200:
@@ -103,25 +158,23 @@ def main():
     soup = bs4.BeautifulSoup(results.text, 'html.parser')
     # This headers will contain all of the clickable links at the side bar
     headers = soup.select('h1 a')
-    position = headers[idx].string
-    job_link=headers[idx].get('href')
-    job_link = jobstreet_main_link+job_link
-    results_job_link = requests.get(job_link)
-    if results_job_link.status_code==200:
-        logger.info('Job street job link is Good to go!')
-        soup = bs4.BeautifulSoup(results_job_link.text,'html.parser')
-        small_section = soup.find_all('div', {"class": "sx2jih0 zcydq86a"})
-        company_name = soup.find_all('span', {"class": "sx2jih0 zcydq84u _18qlyvc0 _18qlyvc1x _18qlyvc2 _1d0g9qk4 _18qlyvcb"})
-        jd = soup.select('[data-automation="jobDescription"]')
-        add_info = soup.find_all('div', {"class": "sx2jih0 zcydq8r _1tqfum90 _1tqfum97"})
-        com_overview = soup.findAll('div', {'class': "sx2jih0 zcydq86q zcydq86v zcydq86w"})
 
-        small_section = return_small_section_text(small_section)
-        company_name = return_company_name(company_name)
-        jd = return_job_details(jd)
-        add_info = return_add_info(add_info)
-        com_overview = return_com_overview(com_overview)
-        log_info(position,company_name,small_section,jd, add_info, com_overview)
+
+    # for idx in range(1, len(headers)):
+    for idx in range(1, 10):
+        position = headers[idx].string
+        job_link=headers[idx].get('href')
+        job_listings.append(extract_from_one_job_listing(job_link, position))
+
+    # idx = 5
+    # position = headers[idx].string
+    # job_link=headers[idx].get('href')
+    # job_listings.append(extract_from_one_job_listing(job_link, position))
+
+    curr_dir = os.getcwd()
+    sample_path = curr_dir+'/sample.jsonl'
+    write_into_jsonl(sample_path, job_listings, overwrite=True)
+
 
 if __name__ == "__main__":
     main()
