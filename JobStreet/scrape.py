@@ -9,11 +9,11 @@ from pprint import pformat
 import time
 import datetime
 import argparse
+import random
 
 # Links
 jobstreet_main_link = 'http://www.jobstreet.com.sg'
 jobstreet_search_link = 'http://www.jobstreet.com.sg/en/job-search/'
-search_terms = ['data-scientist-jobs','data-engineer-jobs', 'data-analyst-jobs', 'machine-learning-jobs']
 
 def return_timestamp():
     dt_time = datetime.datetime.today()
@@ -163,52 +163,46 @@ def extract_from_one_job_listing(job_link, position)->dict:
         return {'Error': {'job_link': job_link, 'Message':"status_code", 'position':position}}
 
 def extract_from_page(link:str)->List:
-    pass
+    job_listings = []
+    results = requests.get(link)
+    if results.status_code == 200:
+        logger.info('Job street link is Good to go!')
+    else:
+        logger.error(f'Unable to proceed with {link}')
+
+    soup = bs4.BeautifulSoup(results.text, 'html.parser')
+    # This headers will contain all of the clickable links at the side bar
+    headers = soup.select('h1 a')
+
+    for idx in range(1, len(headers)):
+#    for idx in range(1, 10):
+        time.sleep(random.randint(0, 3))
+        position = headers[idx].string
+        job_link=headers[idx].get('href')
+        job_listings.append(extract_from_one_job_listing(job_link, position))
+        
+    return job_listings
 
 
-def main():
+def main(args):
 
     job_listings = []
-    page_num = 2
+    page_num = args.pages
 
-    link = jobstreet_search_link + search_terms[0]
-    results = requests.get(link)
-    if results.status_code == 200:
-        logger.info('Job street link is Good to go!')
-    else:
-        logger.error(f'Unable to proceed with {link}')
+    # the link needs the additional term of jobs in order for the url to be valid
+    search_term = args.search_term + '-jobs'
 
-    soup = bs4.BeautifulSoup(results.text, 'html.parser')
-    # This headers will contain all of the clickable links at the side bar
-    headers = soup.select('h1 a')
+    link = jobstreet_search_link + search_term
 
+    for pg_num in range(1,page_num+1):
+        time.sleep(random.randint(0, 3))
+        # Should return something like this format https://www.jobstreet.com.sg/en/job-search/data-scientist-jobs/480/
+        # jobstreet search link + search term + page num
+        link = jobstreet_search_link+ search_term+"/"+ str(pg_num)+"/"
 
-    for idx in range(1, len(headers)):
-#    for idx in range(1, 10):
-        position = headers[idx].string
-        job_link=headers[idx].get('href')
-        job_listings.append(extract_from_one_job_listing(job_link, position))
-
-
-    time.sleep(5)
-    # Should return something like this format https://www.jobstreet.com.sg/en/job-search/data-scientist-jobs/480/
-    # jobstreet search link + search term + page num
-    link = jobstreet_search_link+ search_terms[0]+"/"+ str(page_num)+"/"
-    results = requests.get(link)
-    if results.status_code == 200:
-        logger.info('Job street link is Good to go!')
-    else:
-        logger.error(f'Unable to proceed with {link}')
-
-    soup = bs4.BeautifulSoup(results.text, 'html.parser')
-    # This headers will contain all of the clickable links at the side bar
-    headers = soup.select('h1 a')
-
-    for idx in range(1, len(headers)):
-#    for idx in range(1, 10):
-        position = headers[idx].string
-        job_link=headers[idx].get('href')
-        job_listings.append(extract_from_one_job_listing(job_link, position))
+        temp_listing = extract_from_page(link)
+        for listing in temp_listing:
+            job_listings.append(listing)
 
     curr_dir = os.getcwd()
     sample_path = curr_dir+'/sample'+ timestamp +'.jsonl'
@@ -217,7 +211,11 @@ def main():
 
 if __name__ == "__main__":
     parser =argparse.ArgumentParser()
-    parser.add_argument('--pages', type=int, default=5)
-    parser.add_argument('--search_term', type=str, default='Data-scientist')
+    parser.add_argument('--pages', type=int, default=2, help='Number of pages in the search term. \
+        If you entered a large number than what is available, the link will go back to the first page ')
+    parser.add_argument('--search_term', type=str, default='Data-scientist', help='The job that you want')
 
-    main()
+    args = parser.parse_args()
+
+    logger.info(f" Search parameters are {args}")
+    main(args)
