@@ -2,5 +2,8 @@
 *.csv
 *.ipynb
 
+# All log files
+logfile*
+
 # all . folders
 .*/
