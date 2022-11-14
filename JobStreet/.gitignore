@@ -1,2 +1,5 @@
 # Ignore outputs
 *.jsonl
+
+# My eda
+!eda.ipynb
