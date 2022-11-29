@@ -6,3 +6,5 @@ spacy
 nltk
 transformers
 torch
+# For Jupyterbook
+ghp-import
