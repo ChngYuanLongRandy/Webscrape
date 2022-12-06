@@ -1,0 +1,725 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Autogenerate a sample JD &#8212; Web Scrapping Stuff!</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Preprocess" href="eda.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      
+      
+      <h1 class="site-logo" id="site-title">Web Scrapping Stuff!</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    Jupyter Book Documentation
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  JobStreet
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="eda.html">
+   Preprocess
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Autogenerate a sample JD
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/executablebooks/jupyter-book/master?urlpath=tree/JobStreet/generator.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/JobStreet/generator.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing-the-text-files">
+   Preprocessing the text files
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finetuning">
+   Finetuning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inference">
+   Inference
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Autogenerate a sample JD</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing-the-text-files">
+   Preprocessing the text files
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finetuning">
+   Finetuning
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#inference">
+   Inference
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="autogenerate-a-sample-jd">
+<h1>Autogenerate a sample JD<a class="headerlink" href="#autogenerate-a-sample-jd" title="Permalink to this headline">#</a></h1>
+<p>Let’s try to generate a sample JD, JR based on the information that we have here, we will finetune a GPT3 with the JD and JRs that we have.</p>
+<ul class="simple">
+<li><p>Load up a dataset instance with all of the data</p></li>
+<li><p>Write up the trainer instance</p></li>
+<li><p>Train!</p></li>
+<li><p>Save model</p></li>
+<li><p>Test model</p></li>
+</ul>
+<section id="preprocessing-the-text-files">
+<h2>Preprocessing the text files<a class="headerlink" href="#preprocessing-the-text-files" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">TextDataset</span><span class="p">,</span> <span class="n">AutoTokenizer</span><span class="p">,</span> <span class="n">AutoModel</span><span class="p">,</span> <span class="n">pipeline</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">new_tokeniser</span> <span class="o">=</span> <span class="n">AutoTokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="s2">&quot;bert-base-uncased&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">TRAIN_FILE_PATH</span> <span class="o">=</span> <span class="s2">&quot;./train_jd.txt&quot;</span>
+<span class="n">TEST_FILE_PATH</span> <span class="o">=</span> <span class="s2">&quot;./test_jd.txt&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_text</span> <span class="o">=</span> <span class="n">data_pd_no_dup</span><span class="p">[</span><span class="n">data_pd_no_dup</span><span class="p">[</span><span class="s2">&quot;job_description&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;None&#39;</span><span class="p">][</span><span class="s1">&#39;job_description&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [4],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">train_text</span> <span class="o">=</span> <span class="n">data_pd_no_dup</span><span class="p">[</span><span class="n">data_pd_no_dup</span><span class="p">[</span><span class="s2">&quot;job_description&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s1">&#39;None&#39;</span><span class="p">][</span><span class="s1">&#39;job_description&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="ne">NameError</span>: name &#39;data_pd_no_dup&#39; is not defined
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">train_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>826
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_text</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>array([&#39;Develop targeted bespoke analytics models to help the venture extract value from, and monetise, data on our platforms, where such value extraction could include the likes of better client decisioning, pricing and opportunity identification..Research, design, implement and validate cutting-edge analytics and data visualization techniques to achieve targeted outcomes, such as bringing predicted outcomes closer to experience while ensuring consistency with the model ecosystem, while identifying opportunities for solutions to be leveraged across applications to broaden their scope of use and improve risk analysis..Collaborate with partner technology teams in setting up an effective model lifecycle platform on the cloud, with possible roles to play in cloud architecture and platform engineering..&#39;,
+       &#39;Engage business users to discover how knowledge graph and/or NLP can enable operations transformation, such as to enhance operation effectiveness, raise productivity and support decision-making..Design, develop &amp; deploy customised and scalable solutions as part of the end-to-end AI/ML pipeline for NLP..Design, develop &amp; deploy customised and scalable knowledge graph solutions or products..Stay relevant in the latest technologies and trends in knowledge graph and NLP..Support company-wide initiatives to inspire and upskill colleagues..&#39;,
+       &#39;Work with the Data Science team to transform data science prototypes into production models using best practices for model development, management and maintenance  .Research and implement appropriate ML algorithms and tools, select appropriate datasets, benchmark models, and perform statistical analysis and fine-tuning .Keep models up to date by incorporating continuous learning into system .Work closely with an entrepreneurial team of experienced researchers and software engineers to successfully ship software products and continue to grow our business .&#39;,
+       &#39;Lead the continuous development of advanced analytics and AI/ML capabilities with a focus of NLP and Computer Vision..Implement scalable and robust AI/ML systems computing on large volumes of datasets using a variety of open source and proprietary Data Science technologies.End to end involvement in AI/ML projects from design, data processing, development, implementation, documentation, validation and optimization.Conduct research on AI/ML publications and be able to validate and implement according to local data and business needs.Work closely with stakeholders to ensure high standards of data governance during implementation.&#39;,
+       &#39;Develop, test and maintain the data infrastructure, the data ingestion pipeline, data store and data processing on-premises and cloud.Design, build, deploy and manage end-to-end data pipelines for batch and stream processing that can adequately handle the needs of a rapidly growing data-driven organisation.Responsible for the building of scalable and reliable ETL processes for the ingestion and integration of large, structured and unstructured data from variety of data sources on-premises and on the cloud platforms.Implement and execute data security and data quality measurements to ensure compliance to data security and data governance policies.Implement analytic tools, analytic applications and user self-service portal for data scientists and business users\u200b.&#39;],
+      dtype=object)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_text</span><span class="p">,</span> <span class="n">test_text</span> <span class="o">=</span> <span class="n">train_test_split</span><span class="p">(</span><span class="n">train_text</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="n">RANDOM_STATE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">train_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>578
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">len</span><span class="p">(</span><span class="n">test_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>248
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">write_text_files</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">files</span><span class="p">):</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">writer</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+            <span class="n">writer</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">write_text_files</span><span class="p">(</span><span class="n">TRAIN_FILE_PATH</span><span class="p">,</span> <span class="n">train_text</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">TextDataset</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="finetuning">
+<h2>Finetuning<a class="headerlink" href="#finetuning" title="Permalink to this headline">#</a></h2>
+<p>The finetuning of the model actually takes place in Google Colab because they have GPU there.</p>
+<p>Reference code: <a class="reference external" href="https://www.kaggle.com/code/changyeop/how-to-fine-tune-gpt-2-for-beginners">https://www.kaggle.com/code/changyeop/how-to-fine-tune-gpt-2-for-beginners</a></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_dataset</span> <span class="o">=</span> <span class="n">TextDataset</span><span class="p">(</span>
+    <span class="n">tokenizer</span><span class="o">=</span> <span class="n">new_tokeniser</span><span class="p">,</span>
+    <span class="n">file_path</span><span class="o">=</span><span class="n">TRAIN_FILE_PATH</span><span class="p">,</span>
+    <span class="n">block_size</span><span class="o">=</span><span class="mi">500</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">test_dataset</span> <span class="o">=</span> <span class="n">TextDataset</span><span class="p">(</span>
+    <span class="n">tokenizer</span><span class="o">=</span><span class="n">new_tokeniser</span><span class="p">,</span>
+    <span class="n">file_path</span><span class="o">=</span><span class="n">TEST_FILE_PATH</span><span class="p">,</span>
+    <span class="n">block_size</span><span class="o">=</span><span class="mi">500</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\tools\miniconda3\envs\scrapper-env\lib\site-packages\transformers\data\datasets\language_modeling.py:54: FutureWarning: This dataset will be removed from the library soon, preprocessing should be handled with the 🤗 Datasets library. You can have a look at this example script for pointers: https://github.com/huggingface/transformers/blob/main/examples/pytorch/language-modeling/run_mlm.py
+  warnings.warn(
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">TextDataset</span><span class="p">,</span> <span class="n">DataCollatorForLanguageModeling</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">GPT2Tokenizer</span><span class="p">,</span> <span class="n">GPT2LMHeadModel</span>
+<span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">Trainer</span><span class="p">,</span> <span class="n">TrainingArguments</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load_dataset</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">,</span> <span class="n">block_size</span> <span class="o">=</span> <span class="mi">128</span><span class="p">):</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">TextDataset</span><span class="p">(</span>
+        <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="p">,</span>
+        <span class="n">file_path</span> <span class="o">=</span> <span class="n">file_path</span><span class="p">,</span>
+        <span class="n">block_size</span> <span class="o">=</span> <span class="n">block_size</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">dataset</span>
+
+
+<span class="k">def</span> <span class="nf">load_data_collator</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">,</span> <span class="n">mlm</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+    <span class="n">data_collator</span> <span class="o">=</span> <span class="n">DataCollatorForLanguageModeling</span><span class="p">(</span>
+        <span class="n">tokenizer</span><span class="o">=</span><span class="n">tokenizer</span><span class="p">,</span> 
+        <span class="n">mlm</span><span class="o">=</span><span class="n">mlm</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">data_collator</span>
+
+
+<span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">,</span><span class="n">model_name</span><span class="p">,</span>
+          <span class="n">output_dir</span><span class="p">,</span>
+          <span class="n">overwrite_output_dir</span><span class="p">,</span>
+          <span class="n">per_device_train_batch_size</span><span class="p">,</span>
+          <span class="n">num_train_epochs</span><span class="p">,</span>
+          <span class="n">save_steps</span><span class="p">):</span>
+  <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">GPT2Tokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+  <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">load_dataset</span><span class="p">(</span><span class="n">train_file_path</span><span class="p">,</span> <span class="n">tokenizer</span><span class="p">)</span>
+  <span class="n">data_collator</span> <span class="o">=</span> <span class="n">load_data_collator</span><span class="p">(</span><span class="n">tokenizer</span><span class="p">)</span>
+
+  <span class="n">tokenizer</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+      
+  <span class="n">model</span> <span class="o">=</span> <span class="n">GPT2LMHeadModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_name</span><span class="p">)</span>
+
+  <span class="n">model</span><span class="o">.</span><span class="n">save_pretrained</span><span class="p">(</span><span class="n">output_dir</span><span class="p">)</span>
+
+  <span class="n">training_args</span> <span class="o">=</span> <span class="n">TrainingArguments</span><span class="p">(</span>
+          <span class="n">output_dir</span><span class="o">=</span><span class="n">output_dir</span><span class="p">,</span>
+          <span class="n">overwrite_output_dir</span><span class="o">=</span><span class="n">overwrite_output_dir</span><span class="p">,</span>
+          <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="n">per_device_train_batch_size</span><span class="p">,</span>
+          <span class="n">num_train_epochs</span><span class="o">=</span><span class="n">num_train_epochs</span><span class="p">,</span>
+      <span class="p">)</span>
+
+  <span class="n">trainer</span> <span class="o">=</span> <span class="n">Trainer</span><span class="p">(</span>
+          <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+          <span class="n">args</span><span class="o">=</span><span class="n">training_args</span><span class="p">,</span>
+          <span class="n">data_collator</span><span class="o">=</span><span class="n">data_collator</span><span class="p">,</span>
+          <span class="n">train_dataset</span><span class="o">=</span><span class="n">train_dataset</span><span class="p">,</span>
+  <span class="p">)</span>
+      
+  <span class="n">trainer</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+  <span class="n">trainer</span><span class="o">.</span><span class="n">save_model</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Parameters</span>
+
+<span class="n">CURR_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
+<span class="n">DATA_DIR</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">CURR_DIR</span><span class="p">,</span><span class="s1">&#39;data&#39;</span><span class="p">)</span>
+<span class="n">TRAIN_FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span><span class="s2">&quot;train_jd.txt&quot;</span><span class="p">)</span>
+<span class="n">TEST_FILE_PATH</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">DATA_DIR</span><span class="p">,</span><span class="s2">&quot;test_jd.txt&quot;</span><span class="p">)</span>
+
+<span class="n">train_file_path</span> <span class="o">=</span> <span class="s2">&quot;/content/drive/MyDrive/Articles.txt&quot;</span>
+<span class="n">model_name</span> <span class="o">=</span> <span class="s1">&#39;gpt2&#39;</span>
+<span class="n">output_dir</span> <span class="o">=</span> <span class="s1">&#39;/content/drive/MyDrive/result&#39;</span>
+<span class="n">overwrite_output_dir</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">per_device_train_batch_size</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">num_train_epochs</span> <span class="o">=</span> <span class="mf">5.0</span>
+<span class="n">save_steps</span> <span class="o">=</span> <span class="mi">500</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train!</span>
+<span class="n">train</span><span class="p">(</span>
+    <span class="n">train_file_path</span><span class="o">=</span><span class="n">TRAIN_FILE_PATH</span><span class="p">,</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="n">model_name</span><span class="p">,</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="n">CURR_DIR</span><span class="p">,</span>
+    <span class="n">overwrite_output_dir</span><span class="o">=</span><span class="n">overwrite_output_dir</span><span class="p">,</span>
+    <span class="n">per_device_train_batch_size</span><span class="o">=</span><span class="n">per_device_train_batch_size</span><span class="p">,</span>
+    <span class="n">num_train_epochs</span><span class="o">=</span><span class="n">num_train_epochs</span><span class="p">,</span>
+    <span class="n">save_steps</span><span class="o">=</span><span class="n">save_steps</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="inference">
+<h2>Inference<a class="headerlink" href="#inference" title="Permalink to this headline">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">transformers</span> <span class="kn">import</span> <span class="n">PreTrainedTokenizerFast</span><span class="p">,</span> <span class="n">GPT2LMHeadModel</span><span class="p">,</span> <span class="n">GPT2TokenizerFast</span><span class="p">,</span> <span class="n">GPT2Tokenizer</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">load_model</span><span class="p">(</span><span class="n">model_path</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">GPT2LMHeadModel</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span>
+
+
+<span class="k">def</span> <span class="nf">load_tokenizer</span><span class="p">(</span><span class="n">tokenizer_path</span><span class="p">):</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">GPT2Tokenizer</span><span class="o">.</span><span class="n">from_pretrained</span><span class="p">(</span><span class="n">tokenizer_path</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">tokenizer</span>
+
+
+<span class="k">def</span> <span class="nf">generate_text</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">max_length</span><span class="p">):</span>
+    <span class="n">model_path</span> <span class="o">=</span> <span class="s2">&quot;/content/model&quot;</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">load_model</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+    <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">load_tokenizer</span><span class="p">(</span><span class="n">model_path</span><span class="p">)</span>
+    <span class="n">ids</span> <span class="o">=</span> <span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">sequence</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">return_tensors</span><span class="o">=</span><span class="s1">&#39;pt&#39;</span><span class="p">)</span>
+    <span class="n">final_outputs</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">generate</span><span class="p">(</span>
+        <span class="n">ids</span><span class="p">,</span>
+        <span class="n">do_sample</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="n">max_length</span><span class="p">,</span>
+        <span class="n">pad_token_id</span><span class="o">=</span><span class="n">model</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">eos_token_id</span><span class="p">,</span>
+        <span class="n">top_k</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
+        <span class="n">top_p</span><span class="o">=</span><span class="mf">0.95</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="n">final_outputs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">skip_special_tokens</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sequence</span> <span class="o">=</span> <span class="nb">input</span><span class="p">()</span> 
+<span class="n">max_len</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">input</span><span class="p">())</span> 
+<span class="n">generate_text</span><span class="p">(</span><span class="n">sequence</span><span class="p">,</span> <span class="n">max_len</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Check it out at huggingface youself!
+<a class="reference external" href="https://huggingface.co/hashketh/gpt2-data-science-job-description?text=Job+Description">https://huggingface.co/hashketh/gpt2-data-science-job-description?text=Job+Description</a></p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./JobStreet"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="eda.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Preprocess</p>
+        </div>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Randy<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
