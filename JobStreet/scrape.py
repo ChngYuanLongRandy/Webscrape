@@ -72,8 +72,8 @@ def return_company_overview(results)->dict:
 @log_decorator(logger.name)
 def return_job_details(results)->dict:
     """Returns the job details in a dictionary with the headers in bold 
-    and the list underneath them as values. Does not capture if they are
-    not in list!
+    and the list underneath them as values. If the information does not
+    conform to the format then the whole chunk is taken
 
     Args:
         results (bs4.element.ResultSet): From soup.select
@@ -85,24 +85,32 @@ def return_job_details(results)->dict:
     # its false by default coz in the first run I am always expecting a header first before lists will appear
     new_header = False
     temp_string = ""
-    for idx, content in enumerate(results[0].find_all(['li','strong','b'])):
-        if content.name == "strong" or content.name == "b":
-            if new_header == True:
+    # finds bold and list. If not found then extracts everything
+    if results[0].find_all('strong') and results[0].find_all('li'):
+        for idx, content in enumerate(results[0].find_all(['li','strong'])):
+            if content.name == "strong":
+                if new_header == True:
+                    last_key = list(temp_dict.keys())[-1]
+                    temp_dict[last_key] = temp_string
+                    temp_string = ""
+                    new_header = False
+                temp_dict[content.text] = []
+                new_header = True
+                continue
+            if (content.name == 'li'):
+                if content.string is None:
+                    temp_string = ""
+                else:
+                    temp_string += content.string + "."
+            if idx == len(results[0].find_all(['li','strong']))-1:
                 last_key = list(temp_dict.keys())[-1]
                 temp_dict[last_key] = temp_string
-                temp_string = ""
-                new_header = False
-            temp_dict[content.text] = []
-            new_header = True
-            continue
-        if (content.name == 'li'):
-            if content.string is None:
-                temp_string = ""
-            else:
-                temp_string += content.string + "."
-        if idx == len(results[0].find_all(['li','strong','b']))-1:
-            last_key = list(temp_dict.keys())[-1]
-            temp_dict[last_key] = temp_string
+    elif results[0].find_all(['li']):
+        list_jd = results[0].find_all(['li'])
+        temp_dict = {'no_header_JD' : [item.string +'.' for item in list_jd]}
+
+    else:
+        temp_dict = {'unorganised_jd' : results[0].text}
 
     return temp_dict
 
@@ -289,7 +297,8 @@ def main(args):
 
     curr_dir = os.getcwd()
     sample_path = curr_dir+'/'+ search_term + timestamp +'.jsonl'
-    write_into_jsonl(sample_path, job_listings, overwrite=True)
+    write_into_jsonl(sample_path, job_listings)
+    logger.info('Job completed!')
 
 
 if __name__ == "__main__":
