@@ -7,3 +7,6 @@ logfile*
 
 # all . folders
 .*/
+
+# ignore documentation
+doc/
