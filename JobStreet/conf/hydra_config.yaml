@@ -7,3 +7,5 @@ html_tag:
 settings:
   pages: 2
   search_term: "Data-scientist"
+  jobstreet_main_link : 'http://www.jobstreet.com.sg'
+  jobstreet_search_link : 'http://www.jobstreet.com.sg/en/job-search/'
