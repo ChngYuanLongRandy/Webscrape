@@ -2,8 +2,8 @@
  
 This consolidates my efforts in scraping websites.
 It should contain scrappers for 
-- Jobstreet
-- Newegg
+- Jobstreet (using beautifulsoup)
+- Newegg (using Scrapy)
 
 Work in progress or planned
 - NTUC
