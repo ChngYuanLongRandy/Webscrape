@@ -8,5 +8,8 @@ logfile*
 # all . folders
 .*/
 
+# all pycache folders
+__pycache__
+
 # ignore documentation
 doc/
