@@ -2,8 +2,8 @@
  
 This consolidates my efforts in scraping websites.
 It should contain scrappers for 
-- Jobstreet
-- Newegg
+- Jobstreet (using beautifulsoup)
+- Newegg (using Scrapy)
 
 Work in progress or planned
 - NTUC
@@ -28,14 +28,14 @@ conda activate scrapper-env
 
 4. Choose scrapper and run (for exact instructions refer to each header)
 ```
-python/<name of scrapper>/scrape.py --pages <num of pages> --search_term <what you want to search, please add a hypen in between words>
+python/<name of scrapper>/scrape.py settings.pages <num of pages> settings.search_term <what you want to search, please add a hypen in between words>
 ```
 Example
 ```
-python/JobStreet/scrape.py --pages 5 --search_term Data-Engineer
+python/JobStreet/scrape.py pages 5 search_term Data-Engineer
 ```
 
-5. Outputs JSONL file and a log file
+5. Outputs JSONL file and a log file in the output folder
 
 ## Jobstreet
 
