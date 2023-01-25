@@ -8,3 +8,6 @@ transformers
 torch
 # For Jupyterbook
 ghp-import
+# selenium stuff
+selenium
+webdriver-manager
