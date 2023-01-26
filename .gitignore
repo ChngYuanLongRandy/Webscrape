@@ -2,6 +2,8 @@
 *.csv
 *.ipynb
 
+!testscript.ipynb
+
 # All log files
 logfile*
 
@@ -9,7 +11,7 @@ logfile*
 .*/
 
 # all pycache folders
-__pycache__
+__pycache__/
 
 # ignore documentation
 doc/
