@@ -1,4 +1,2 @@
 settings:
-  search-terms: 
-  - 'machine learning'
-  - 'data scientist'
+  search-term: 'machine learning'
