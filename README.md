@@ -4,12 +4,15 @@ This consolidates my efforts in scraping websites.
 It should contain scrappers for 
 - Jobstreet (using beautifulsoup)
 - Newegg (using Scrapy)
+- Careers Future (using Selenium)
 
 Work in progress or planned
 - NTUC
-- redmart
+- Redmart
 - Giant
 - Sheng siong
+- Amazon
+- Song Fish
 
 ## To use
 
@@ -35,11 +38,4 @@ Example
 python/JobStreet/scrape.py pages 5 search_term Data-Engineer
 ```
 
-5. Outputs JSONL file and a log file in the output folder
-
-## Jobstreet
-
-Jobstreet Data: 
-- See what affects salary
-- Come up with topic modelling
-- Generate a sample Job Description
+5. Outputs either a JSONL or a CSV file and a log file in the output folder
