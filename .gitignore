@@ -3,6 +3,7 @@
 *.ipynb
 
 !testscript.ipynb
+!eda.ipynb
 
 # All log files
 logfile*
